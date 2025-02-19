@@ -4,7 +4,9 @@
  */
 package jframesource;
 
+import java.awt.Color;
 import java.util.ArrayList;
+import javax.swing.table.DefaultTableCellRenderer;
 /**
  *
  * @author user
@@ -18,6 +20,12 @@ public class NewJFrame extends javax.swing.JFrame {
      */
     public NewJFrame() {
         initComponents();
+        
+        var headerRenderer = new DefaultTableCellRenderer();
+        headerRenderer.setBackground(new Color(0,150,150));
+
+        for (int i = 0; i < jTable1.getModel().getColumnCount(); i++)
+            jTable1.getColumnModel().getColumn(i).setHeaderRenderer(headerRenderer);
     }
 
     /**
@@ -49,7 +57,6 @@ public class NewJFrame extends javax.swing.JFrame {
         setBackground(new java.awt.Color(153, 255, 51));
         setCursor(new java.awt.Cursor(java.awt.Cursor.WAIT_CURSOR));
         setResizable(false);
-        setType(java.awt.Window.Type.UTILITY);
 
         jPanel1.setBackground(new java.awt.Color(0, 167, 166));
         jPanel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
@@ -159,7 +166,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jButton4.setBackground(new java.awt.Color(0, 204, 204));
         jButton4.setFont(new java.awt.Font("Microsoft JhengHei Light", 1, 12)); // NOI18N
         jButton4.setForeground(new java.awt.Color(0, 102, 102));
-        jButton4.setText("Вычислить все");
+        jButton4.setText("Загрузить");
         jButton4.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton4MouseClicked(evt);
@@ -169,7 +176,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jButton5.setBackground(new java.awt.Color(0, 204, 204));
         jButton5.setFont(new java.awt.Font("Microsoft JhengHei Light", 1, 12)); // NOI18N
         jButton5.setForeground(new java.awt.Color(0, 102, 102));
-        jButton5.setText("Удалить всё");
+        jButton5.setText("Очистить");
         jButton5.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 jButton5MouseClicked(evt);
@@ -215,10 +222,10 @@ public class NewJFrame extends javax.swing.JFrame {
                                         .addComponent(jLabel3)))
                                 .addGap(58, 58, 58)))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 33, Short.MAX_VALUE)
                             .addComponent(jButton3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(24, 24, 24))))
+                            .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(15, 15, 15))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -276,16 +283,15 @@ public class NewJFrame extends javax.swing.JFrame {
     private void jButton4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton4MouseClicked
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel)jTable1.getModel();
         
-        int count = model.getRowCount();
+        model.setRowCount(0);
+        
+        int count = data.size();
+        if (count == 0) return;
 
         for (int i = 0; i < count; i++) {
             // Получение класса из коллекции
             RecIntegral integral = data.get(i);
-            // Вызов метода из класса для рассчета интеграла
-            double resNum = integral.CalculateResult();
-
-            Object resObj = resNum;
-            model.setValueAt(resObj, i, 3);
+            model.addRow(new Object[] {integral.low, integral.high, integral.step, integral.result});
         }
     }//GEN-LAST:event_jButton4MouseClicked
 
@@ -338,10 +344,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jTextField1.setText("");
         jTextField2.setText("");
         jTextField3.setText("");
-        
-        if (low >= high || step >= high || step <= 0.0) {
-            return;
-        }
+     
         
         // Класс
         RecIntegral info;
@@ -362,7 +365,7 @@ public class NewJFrame extends javax.swing.JFrame {
     private void jButton5MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton5MouseClicked
         javax.swing.table.DefaultTableModel model = (javax.swing.table.DefaultTableModel)jTable1.getModel();
         model.setRowCount(0);
-        data.clear();
+        //data.clear();
     }//GEN-LAST:event_jButton5MouseClicked
 
     /**
